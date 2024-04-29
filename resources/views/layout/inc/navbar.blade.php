@@ -28,12 +28,6 @@
                                 <i class="fa fa-heart"></i> Wishlist (<livewire:frontend.wishlist-count>)
                             </a>
                         </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ url('login') }}">{{ __('Login') }}</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ url('register') }}">{{ __('Register') }}</a>
-                            </li>
                         <li class="nav-item dropdown">
                             <!-- Authentication Links -->
                             @guest

@@ -17,5 +17,4 @@
         <h2>New Product</h2>
     </div>
 </div>
-
 @endsection
