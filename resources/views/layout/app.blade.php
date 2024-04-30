@@ -12,7 +12,7 @@
 
     <meta name="description" content="@yield('meta_description')">
     <meta name="keywords" content="@yield('meta_keyword')">
-    <meta name="author" content="Ammar Hawari">
+    <meta name="author" content="Muhammad Rafly">
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">

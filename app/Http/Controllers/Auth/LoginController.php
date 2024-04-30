@@ -20,10 +20,21 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials)) {
             // Authentication passed
-            return redirect()->intended('/dashboard'); // Redirect to dashboard or desired page
+            return redirect()->intended('/'); // Redirect to dashboard or desired page
         } else {
             // Authentication failed
             return back()->withErrors(['email' => 'Invalid credentials']); // Redirect back with error message
         }
+    }
+
+    public function logout(Request $request)
+    {
+        Auth::logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+
+        return redirect('/');
     }
 }

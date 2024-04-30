@@ -8,7 +8,8 @@
                 <div class="col-md-5 my-auto">
                     <form role="search" action="{{ url('search') }}" method="GET">
                         <div class="input-group">
-                            <input type="search" name="search" value="" placeholder="Search your product" class="form-control" />
+                            <input type="search" name="search" value="" placeholder="Search your product"
+                                class="form-control" />
                             <button class="btn bg-white" type="submit">
                                 <i class="fa fa-search"></i>
                             </button>
@@ -48,14 +49,17 @@
                                 <i class="fa fa-user"></i> {{ Auth::user()->name }}
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="{{ url('wishlist') }}"><i class="fa fa-heart"></i> My Wishlist</a></li>
-                                <li><a class="dropdown-item" href="{{ url('cart') }}"><i class="fa fa-shopping-cart"></i> My Cart</a>
+                                <li><a class="dropdown-item" href="{{ url('wishlist') }}"><i class="fa fa-heart"></i> My
+                                        Wishlist</a></li>
+                                <li><a class="dropdown-item" href="{{ url('cart') }}"><i class="fa fa-shopping-cart"></i>
+                                        My Cart</a>
                                 </li>
                                 <li>
                                     {{-- <a class="dropdown-item" href="#"><i class="fa fa-sign-out"></i> Logout</a> --}}
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                         onclick="event.preventDefault();
-                                             document.getElementById('logout-form').submit();"><i class="fa fa-sign-out"></i>
+                                             document.getElementById('logout-form').submit();"><i
+                                            class="fa fa-sign-out"></i>
                                         {{ __('Logout') }}
                                     </a>
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
