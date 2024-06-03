@@ -1,7 +1,5 @@
 @extends('layout.admin')
 
-@section('title', 'Product List')
-
 @section('content')
     <div class="row">
 
@@ -39,24 +37,29 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @forelse ($products as $product)
                                 <tr>
-                                    <td>1</td>
+                                    <td>{{ $product->id }}</td>
                                     <td>
-                                       Dried
+                                        @if ($product->category)
+                                            {{ $product->category->name }}
+                                        @else
+                                            No Category
+                                        @endif
                                     </td>
-                                    <td>Betel Nut Dried</td>
-                                    <td>Rp. 3.000.000</td>
-                                    <td>5</td>
-                                    <td>Visible</td>
+                                    <td>{{ $product->name }}</td>
+                                    <td>{{ $product->selling_price }}</td>
+                                    <td>{{ $product->quantity }}</td>
+                                    <td>{{ $product->status == '1' ? 'Hidden' : 'Visible' }}</td>
                                     <td>
                                         <a class="btn btn-sm btn-success my-2"
-                                            href="{{ url('admin/products/edit') }}">Edit</a>
-                                        <a class="btn btn-sm btn-danger" onclick="return confirm('Are you sure want to delete this product?')" href="{{ url('admin/products/delete') }}" >Delete</a>
+                                            href="{{ url('admin/products/' . $product->id . '/edit') }}">Edit</a>
+                                        <a class="btn btn-sm btn-danger" onclick="return confirm('Are you sure want to delete this product?')" href="{{ url('admin/products/' . $product->id . '/delete') }}" >Delete</a>
                                     </td>
                                 </tr>
-                            {{-- @empty
+                            @empty
                                 <td colspan="7">No Product Available</td>
-                            @endforelse --}}
+                            @endforelse
                         </tbody>
                     </table>
                     </div>

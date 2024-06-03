@@ -3,10 +3,9 @@
 @section('title', 'Product Category')
 
 @section('content')
-
 <div>
     <div>
-        <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        <div wire:ignore.self class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
             aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -16,7 +15,7 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form>
+                    <form wire:submit.prevent="destroyCategory">
                         <div class="modal-body">
                             <h6>Are you sure want to delete this category?</h6>
                         </div>
@@ -55,28 +54,31 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                @foreach ($categories as $category)
                                     <tr>
-                                        <td>1</td>
-                                        <td>Dried</td>
-                                        <td>Visible</td>
+                                        <td>{{ $category->id }}</td>
+                                        <td>{{ $category->name }}</td>
+                                        <td>{{ $category->status == '1' ? 'Hidden' : 'Visible' }}</td>
                                         <td>
                                             <a class="btn btn-success my-2"
-                                                href="{{ url('admin/category/edit') }}">Edit</a>
+                                                href="{{ url('admin/category/' . $category->id . '/edit') }}">Edit</a>
                                             <a class="btn btn-danger" href="#" data-bs-toggle="modal" data-bs-dismiss="modal"
-                                                data-bs-target="#deleteModal"">Delete</a>
+                                                data-bs-target="#deleteModal" wire:click="deleteCategory({{ $category->id }})">Delete</a>
                                         </td>
                                     </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
-                    {{-- <div>
-                        {{ $categories->links() }}
-                    </div> --}}
+                    <div>
+                        {{-- {{ $categories->links() }} --}}
+                    </div>
                 </div>
             </div>
 
         </div>
     </div>
 </div>
+
 
 @endsection

@@ -23,11 +23,11 @@
                                     <label for="">Filter by Status</label>
                                     <select name="status" class="form-select">
                                         <option value="">Select All Status</option>
-                                        <option value="in progress">In Progress</option>
-                                        <option value="completed">Completed</option>
-                                        <option value="pending">Pending</option>
-                                        <option value="canceled">Canceled</option>
-                                        <option value="out-for-delivery"> Out of Delivery</option>
+                                        <option value="in progress" {{ Request::get('status') == 'in progress' ? 'selected':'' }}>In Progress</option>
+                                        <option value="completed" {{ Request::get('status') == 'completed' ? 'selected':'' }}>Completed</option>
+                                        <option value="pending" {{ Request::get('status') == 'pending' ? 'selected':'' }}>Pending</option>
+                                        <option value="canceled" {{ Request::get('status') == 'canceled' ? 'selected':'' }}>Canceled</option>
+                                        <option value="out-for-delivery" {{ Request::get('status') == 'out-for-delivery' ? 'selected':'' }}> Out of Delivery</option>
                                     </select>
                                 </div>
                                 <div class="col-md-6">
@@ -48,18 +48,24 @@
                                     <th>Action</th>
                                 </thead>
                                 <tbody>
+                                    @forelse ($orders as $Orderitem)
                                         <tr>
-                                            <td>123</td>
-                                            <td>232333CSE</td>
-                                            <td>Rafael Struick</td>
-                                            <td>COD</td>
-                                            <td>22 - 04 - 2024</td>
-                                            <td>Out of Delivery</td>
+                                            <td>{{ $Orderitem->id }}</td>
+                                            <td>{{ $Orderitem->tracking_no }}</td>
+                                            <td>{{ $Orderitem->fullname }}</td>
+                                            <td>{{ $Orderitem->payment_mode }}</td>
+                                            <td>{{ $Orderitem->created_at->format('d-m-Y') }}</td>
+                                            <td>{{ $Orderitem->status_message }}</td>
                                             <td>
-                                                <a href="{{ url('admin/order/') }}" class="btn btn-primary btn-sm">View</a>
+                                                <a href="{{ url('admin/order/'.$Orderitem->id) }}" class="btn btn-primary btn-sm">View</a>
                                             </td>
                                             <td></td>
                                         </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="7">No Orders Available</td>
+                                        </tr>
+                                    @endforelse
                                 </tbody>
                             </table>
                             {{-- <div>

@@ -29,66 +29,41 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                @forelse ($users as $user)
                                     <tr>
-                                        <td>1</td>
-                                        <td>Muhammad Rafly</td>
-                                        <td>mrafly@graduate.utm.my</td>
+                                        <td>{{ $user->id }}</td>
+                                        <td>{{ $user->name }}</td>
+                                        <td>{{ $user->email }}</td>
                                         <td>
-                                            <label class="badge btn-primary">Admin</label>
+                                            @if ($user->role_as == 0)
+                                                <label class="badge btn-warning">User</label>
+                                            @elseif($user->role_as == 1)
+                                                <label class="badge btn-primary">Admin</label>
+                                            @elseif($user->role_as == 2)
+                                            <label class="badge btn-secondary">Seller</label>
+                                            @else
+                                                <label class="badge btn-primary">None</label>
+                                            @endif
                                         </td>
                                         <td>
                                             <a class="btn btn-sm btn-warning my-2"
-                                                href="{{ url('admin/users/change-password') }}">Change Password</a>
+                                                href="#">Send Warning</a>
                                             <a class="btn btn-sm btn-success my-2"
-                                                href="{{ url('admin/users/edit') }}">Edit</a>
+                                                href="{{ url('admin/users/' . $user->id . '/edit') }}">Edit</a>
                                             <a class="btn btn-sm btn-danger"
                                                 onclick="return confirm('Are you sure want to delete this product?')"
-                                                href="{{ url('admin/users/delete') }}">Delete</a>
+                                                href="{{ url('admin/users/' . $user->id . '/delete') }}">Delete</a>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>Rafael Struick</td>
-                                        <td>rafael@gmai.com</td>
-                                        <td>
-                                            <label class="badge btn-warning">User</label>
-                                        </td>
-                                        <td>
-                                            <a class="btn btn-sm btn-warning my-2"
-                                                href="{{ url('admin/users/change-password') }}">Change Password</a>
-                                            <a class="btn btn-sm btn-success my-2"
-                                                href="{{ url('admin/users/edit') }}">Edit</a>
-                                            <a class="btn btn-sm btn-danger"
-                                                onclick="return confirm('Are you sure want to delete this product?')"
-                                                href="{{ url('admin/users/delete') }}">Delete</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>Budi Sudarsono</td>
-                                        <td>budi@gmail.com</td>
-                                        <td>
-                                            <label class="badge btn-success">Seller</label>
-                                        </td>
-                                        <td>
-                                            <a class="btn btn-sm btn-warning my-2"
-                                                href="{{ url('admin/users/change-password') }}">Change Password</a>
-                                            <a class="btn btn-sm btn-success my-2"
-                                                href="{{ url('admin/users/edit') }}">Edit</a>
-                                            <a class="btn btn-sm btn-danger"
-                                                onclick="return confirm('Are you sure want to delete this product?')"
-                                                href="{{ url('admin/users/delete') }}">Delete</a>
-                                        </td>
-                                    </tr>
-                                {{-- @empty
+                                @empty
                                     <td colspan="5">No Users Available</td>
-                                @endforelse --}}
+                                @endforelse
                             </tbody>
                         </table>
                     </div>
-                    {{-- <div>
-                        {{ $users->links() }}
-                    </div> --}}
+                    <div>
+                        {{-- {{ $users->links() }} --}}
+                    </div>
                 </div>
             </div>
         </div>

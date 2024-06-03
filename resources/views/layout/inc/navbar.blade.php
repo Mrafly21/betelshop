@@ -18,17 +18,6 @@
                 </div>
                 <div class="col-md-5 my-auto">
                     <ul class="nav justify-content-end">
-
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ url('cart') }}">
-                                <i class="fa fa-shopping-cart"></i> Cart (<livewire:frontend.cart.cart-count>)
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ url('wishlist') }}">
-                                <i class="fa fa-heart"></i> Wishlist (<livewire:frontend.wishlist-count>)
-                            </a>
-                        </li>
                         <li class="nav-item dropdown">
                             <!-- Authentication Links -->
                             @guest
@@ -44,16 +33,24 @@
                                 </li>
                             @endif
                         @else
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url('cart') }}">
+                                    <i class="fa fa-shopping-cart"></i> Cart ({{ $cartCount }})
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url('wishlist') }}">
+                                    <i class="fa fa-heart"></i> Wishlist ({{ $wishlistCount }})
+                                </a>
+                            </li>
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                                 data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="fa fa-user"></i> {{ Auth::user()->name }}
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="{{ url('wishlist') }}"><i class="fa fa-heart"></i> My
-                                        Wishlist</a></li>
-                                <li><a class="dropdown-item" href="{{ url('cart') }}"><i class="fa fa-shopping-cart"></i>
-                                        My Cart</a>
-                                </li>
+                                <li><a class="dropdown-item" href="{{ url('wishlist') }}"><i class="fa fa-heart"></i> Edit Profile </a></li>
+                                <li><a class="dropdown-item" href="#"><i class="fa fa-heart"></i> Register as Seller </a></li>
+                                <li><a class="dropdown-item" href="#"><i class="fa fa-heart"></i> Message </a></li>
                                 <li>
                                     {{-- <a class="dropdown-item" href="#"><i class="fa fa-sign-out"></i> Logout</a> --}}
                                     <a class="dropdown-item" href="{{ route('logout') }}"
@@ -65,7 +62,6 @@
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                         @csrf
                                     </form>
-
                                 </li>
                             </ul>
                             </li>
