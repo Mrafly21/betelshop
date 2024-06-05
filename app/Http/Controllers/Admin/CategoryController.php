@@ -12,7 +12,11 @@ use Illuminate\Http\Request;
 class CategoryController extends Controller
 {
     public function index(){
-        $categories = Category::all(); // Fetch all categories from the database
+        $user = auth()->user();
+        if ($user->role_as == 0) {
+            return redirect('/')->with('error', 'Access Denied. You do not have permission to access the admin dashboard.');
+        }
+        $categories = Category::all();
         return view('admin.category.index', compact('categories'));
     }
 

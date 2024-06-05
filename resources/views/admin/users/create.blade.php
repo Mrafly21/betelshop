@@ -43,7 +43,7 @@
                                 @enderror
                             </div>
                             <div class="col-md-12 mb-3">
-                                <label for="role_as">Select Rolasde <small>*</small></label>
+                                <label for="role_as">Select Role <small>*</small></label>
                                 <select name="role_as" class="form-control mt-2">
                                     <option value="">Select Role</option>
                                     <option value="0">User</option>

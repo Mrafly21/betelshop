@@ -25,19 +25,7 @@
           </ul>
         </div>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" data-bs-toggle="collapse" href="#product" aria-expanded="false" aria-controls="product">
-          <i class="mdi mdi-database-plus menu-icon"></i>
-          <span class="menu-title">Products</span>
-          <i class="menu-arrow"></i>
-        </a>
-        <div class="collapse" id="product">
-          <ul class="nav flex-column sub-menu">
-            <li class="nav-item"> <a class="nav-link" href="{{ url('admin/products') }}">View Product</a></li>
-            <li class="nav-item"> <a class="nav-link" href="{{ url('admin/products/create') }}">Add Product</a></li>
-          </ul>
-        </div>
-      </li>
+      @if(Auth::user()->role_as =='1')
       <li class="nav-item">
         <a class="nav-link" data-bs-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
           <i class="mdi mdi-account-multiple menu-icon"></i>
@@ -51,24 +39,28 @@
           </ul>
         </div>
       </li>
+      @endif
+      <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="collapse" href="#product" aria-expanded="false" aria-controls="product">
+          <i class="mdi mdi-database-plus menu-icon"></i>
+          <span class="menu-title">Products</span>
+          <i class="menu-arrow"></i>
+        </a>
+        <div class="collapse" id="product">
+          <ul class="nav flex-column sub-menu">
+            <li class="nav-item"> <a class="nav-link" href="{{ url('admin/products') }}">View Product</a></li>
+            <li class="nav-item"> <a class="nav-link" href="{{ url('admin/products/create') }}">Add Product</a></li>
+          </ul>
+        </div>
+      </li>
+      @if(Auth::user()->role_as =='1')
       <li class="nav-item">
         <a class="nav-link" href="{{ url('admin/message') }}">
           <i class="mdi mdi-sale menu-icon"></i>
           <span class="menu-title">Message</span>
         </a>
       </li>
-      {{-- <li class="nav-item">
-        <a class="nav-link" href="{{ url('admin/sliders') }}">
-          <i class="mdi mdi-view-carousel menu-icon"></i>
-          <span class="menu-title">Home Slider</span>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">
-          <i class="mdi mdi-settings-box menu-icon"></i>
-          <span class="menu-title">Side Setting</span>
-        </a>
-      </li> --}}
+      @endif
     </ul>
   </nav>
 

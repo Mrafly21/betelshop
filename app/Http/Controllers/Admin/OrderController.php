@@ -11,25 +11,28 @@ use Illuminate\Http\Request;
 class OrderController extends Controller
 {
     public function index(Request $request)
-    {
-        // $todayDate = Carbon::now();
-        // $orders = Order::whereDate('created_at', $todayDate)->paginate(5);
-
-        // $todayDate = Carbon::now()->format('Y-m-d');
-        $orders = Order::when(
-            $request->date != null,
-            function ($q) use ($request) {
-
-                return $q->whereDate('created_at', $request->date);
-            },
-            // function ($q) use ($todayDate) {
-            //     return $q->whereDate('created_at', $todayDate);
-            // }
-        )->when($request->status != null, function ($q) use ($request) {
-            return $q->where('status_message', $request->status);
-        })->paginate(10);
-        return view('admin.order.index', compact('orders'));
+{
+    $user = auth()->user();
+    if ($user->role_as == 0) {
+        return redirect('/')->with('error', 'Access Denied. You do not have permission to access the admin dashboard.');
     }
+
+    $orders = Order::query(); 
+    if ($user->role_as == 2) {
+        $orders->where('seller_id', $user->id);
+    }
+    if ($request->date) {
+        $orders->whereDate('created_at', $request->date);
+    }
+
+    if ($request->status) {
+        $orders->where('status_message', $request->status);
+    }
+    $orders = $orders->paginate(10);
+
+    return view('admin.order.index', compact('orders'));
+}
+
 
     public function show(int $orderId)
     {
@@ -43,21 +46,14 @@ class OrderController extends Controller
 
     public function updateOrder(Request $request, int $orderId)
 {
-    // Find the order by ID
     $order = Order::findOrFail($orderId);
-
-    // Check the action type
     $action = $request->input('action');
-
-    // Perform the appropriate action based on the action type
     if ($action === 'update_status') {
-        // Update order status
         $order->update([
             'status_message' => $request->update_status
         ]);
         return redirect('admin/order/'.$orderId)->with('message', 'Order Status Updated');
     } elseif ($action === 'update_details') {
-        // Validate the incoming request data for updating details
         $validatedData = $request->validate([
             'fullname' => 'required|string|max:255',
             'phone' => 'required|string|max:255',
@@ -66,10 +62,8 @@ class OrderController extends Controller
             'address' => 'required|string',
             'payment' => 'required|string',
             'shipping' => 'required|string'
-            // Add validation rules for other fields
         ]);
 
-        // Update the order details
         $order->update([
             'fullname' => $validatedData['fullname'],
             'phone' => $validatedData['phone'],
@@ -78,13 +72,10 @@ class OrderController extends Controller
             'address' => $validatedData['address'],
             'payment_mode' => $validatedData['payment'],
             'tracking_no' => $validatedData['shipping'],
-            // Update other fields as needed
         ]);
 
-        // Redirect back to the order details page with a success message
         return redirect('admin/order/'.$orderId)->with('message', 'Order Details Updated');
     } else {
-        // Invalid action
         return redirect('admin/order/'.$orderId)->with('error', 'Invalid action');
     }
 }

@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 
 class FrontendController extends Controller
 {
+    public $quantityCount = 1;
     public function index()
     {
         $sliders = Sliders::where('status', '0')->get();
@@ -31,7 +32,7 @@ class FrontendController extends Controller
     public function products($category_slug){
         $category = Category::where('slug', $category_slug)->first();
         if($category){
-            $products = $category->products()->where('status', '0')->get(); // Assuming you want to filter products that are active.
+            $products = $category->products()->where('status', '0')->get();
             return view('frontend.collections.products.index', compact('category', 'products'));
         } else {
             return redirect()->back()->with('message', 'Category not found.');
@@ -74,6 +75,22 @@ class FrontendController extends Controller
         }
         else{
             return redirect()->back()->with('message', 'Empty Search');
+        }
+    }
+
+    public function incrementQuantity()
+    {
+        if ($this->quantityCount < 10) {
+            $this->quantityCount++;
+        } else {
+            session()->flash('warning', 'Max quantity item is 10');
+        }
+    }
+
+    public function decrementQuantity()
+    {
+        if ($this->quantityCount > 0) {
+            $this->quantityCount--;
         }
     }
 }

@@ -42,37 +42,46 @@ class CheckoutController extends Controller
             'address' => 'required',
             'payment_mode' => 'required'
         ]);
-
-        $order = Order::create([
-            'user_id' => Auth::id(),
-            'tracking_no' => 'ORD' . Str::random(10),
-            'fullname' => $validated['fullname'],
-            'email' => $validated['email'],
-            'phone' => $validated['phone'],
-            'pincode' => $validated['pincode'],
-            'address' => $validated['address'],
-            'status_message' => 'in progress',
-            'payment_mode' => $validated['payment_mode'],
-            'payment_id' => $validated['payment_id'] ?? null
-        ]);
-
-        $carts = Cart::where('user_id', Auth::id())->get();
-        $totalAmount = 0;
-
-        foreach ($carts as $cartItem) {
-            OrderItem::create([
-                'order_id' => $order->id,
-                'product_id' => $cartItem->product_id,
-                'product_color_id' => $cartItem->product_color_id,
-                'quantity' => $cartItem->quantity,
-                'price' => $cartItem->product->selling_price,
-            ]);
-
-            $totalAmount += $cartItem->product->selling_price * $cartItem->quantity;
-            // Adjust inventory logic here as per your model relationships
+    
+        $carts = Cart::with('product')->where('user_id', Auth::id())->get();
+        if ($carts->isEmpty()) {
+            return redirect('collections')->with('error', 'No items in cart to checkout.');
         }
-
+    
+        // Group cart items by seller_id
+        $cartGroups = $carts->groupBy(function ($item) {
+            return $item->product->user_id;
+        });
+    
+        foreach ($cartGroups as $sellerId => $items) {
+            $order = Order::create([
+                'user_id' => Auth::id(),
+                'seller_id' => $sellerId,
+                'tracking_no' => 'ORD' . Str::random(10),
+                'fullname' => $validated['fullname'],
+                'email' => $validated['email'],
+                'phone' => $validated['phone'],
+                'pincode' => $validated['pincode'],
+                'address' => $validated['address'],
+                'status_message' => 'in progress',
+                'payment_mode' => $validated['payment_mode'],
+                'payment_id' => $validated['payment_id'] ?? null
+            ]);
+    
+            foreach ($items as $cartItem) {
+                OrderItem::create([
+                    'order_id' => $order->id,
+                    'product_id' => $cartItem->product_id,
+                    'product_color_id' => $cartItem->product_color_id,
+                    'quantity' => $cartItem->quantity,
+                    'price' => $cartItem->product->selling_price,
+                ]);
+            }
+        }
+    
         Cart::where('user_id', Auth::id())->delete();
-        return redirect('thank-you')->with('message', 'Order Placed Successfully');
+        return redirect('thank-you')->with('message', 'Orders Placed Successfully for Multiple Sellers');
     }
+    
+    
 }

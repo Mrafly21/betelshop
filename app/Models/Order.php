@@ -15,6 +15,7 @@ class Order extends Model
 
     protected $fillable = [
         'user_id',
+        'seller_id',  
         'tracking_no',
         'fullname',
         'email',
@@ -25,6 +26,7 @@ class Order extends Model
         'payment_mode',
         'payment_id'
     ];
+    
 
     public function orderItems(): HasMany
     {

@@ -32,6 +32,9 @@
                                 <th>Product</th>
                                 <th>Price</th>
                                 <th>Quantity</th>
+                                @if(Auth::user()->role_as =='1')
+                                <th>Seller</th>
+                                @endif
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
@@ -50,6 +53,9 @@
                                     <td>{{ $product->name }}</td>
                                     <td>{{ $product->selling_price }}</td>
                                     <td>{{ $product->quantity }}</td>
+                                    @if(Auth::user()->role_as =='1')
+                                    <td>{{ $product->seller->name ?? 'No Seller' }}</td>
+                                    @endif
                                     <td>{{ $product->status == '1' ? 'Hidden' : 'Visible' }}</td>
                                     <td>
                                         <a class="btn btn-sm btn-success my-2"

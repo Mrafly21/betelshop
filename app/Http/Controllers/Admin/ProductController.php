@@ -18,8 +18,18 @@ class ProductController extends Controller
 {
     public function index()
     {
-        $products = Product::all();
-        return view('admin.product.index', compact('products'));
+        $user = auth()->user();
+        if ($user->role_as == 0) {
+            return redirect('/')->with('error', 'Access Denied. You do not have permission to access the admin dashboard.');
+        }
+
+        if ($user->role_as == 1) {
+            $products = Product::with('seller')->get();
+        } else if ($user->role_as == 2) {
+            $products = Product::with('seller')->where('user_id', $user->id)->get();
+        }
+
+    return view('admin.product.index', compact('products'));
     }
 
     public function create()
@@ -108,6 +118,7 @@ class ProductController extends Controller
         $category = Category::findOrFail($validatedData['category_id']);
         $product = $category->products()->create([
             'category_id' => $validatedData['category_id'],
+            'user_id' => auth()->id(), 
             'name' => $validatedData['name'],
             'slug' => Str::slug($validatedData['slug']),
             'small_description' => $validatedData['small_description'],

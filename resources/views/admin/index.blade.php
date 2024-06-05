@@ -61,6 +61,7 @@
                 </div>
                 <hr>
             </div>
+            @if(Auth::user()->role_as =='1')
             <div class="row me-md-3 me-xl-5">
                 <div class="col-md-3">
                     <div class="card card-body bg-warning text-white mb-3">
@@ -91,5 +92,6 @@
                     </div>
                 </div>
             </div>
+            @endif
         </div>
     @endsection

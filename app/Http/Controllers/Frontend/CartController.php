@@ -11,9 +11,7 @@ use Illuminate\Support\Facades\Auth;
 class CartController extends Controller
 {
     public function index(){
-        $cartlist = Cart::where('user_id', auth()->id())->get(); // Adjust based on your database structure
-        
-        // Calculate total price here or in the view
+        $cartlist = Cart::where('user_id', auth()->id())->get();
         $totalPrice = 0;
         foreach ($cartlist as $item) {
             $totalPrice += $item->product->selling_price * $item->quantity;
@@ -23,33 +21,36 @@ class CartController extends Controller
     }
 
     public function addToCart($productId, Request $request)
-    {
-        if (!Auth::check()) {
-            return redirect()->route('login')->with('error', 'Please login to continue.');
-        }
+{
+    if (!Auth::check()) {
+        return redirect()->route('login')->with('error', 'Please login to continue.');
+    }
 
-        $product = Product::where('id', $productId)->where('status', 0)->first();
+    $product = Product::find($productId);
+    if (!$product) {
+        return back()->with('error', 'Product does not exist.');
+    }
 
-        if (!$product) {
-            return back()->with('error', 'Product does not exist.');
-        }
+    $quantity = $request->input('quantity', 1);  // Default to 1 if not provided
+    if ($quantity > $product->quantity) {
+        return back()->with('error', 'Requested quantity not available.');
+    }
 
-        $cart = Cart::where('user_id', Auth::id())
-                    ->where('product_id', $productId)
-                    ->first();
+    $cart = Cart::where('user_id', Auth::id())->where('product_id', $productId)->first();
 
-        if ($cart) {
-            return back()->with('error', 'Product already added to cart.');
-        }
-
+    if ($cart) {
+        $cart->increment('quantity', $quantity);
+    } else {
         Cart::create([
             'user_id' => Auth::id(),
             'product_id' => $productId,
-            'quantity' => 1 // Modify as needed or take from $request
+            'quantity' => $quantity
         ]);
-
-        return back()->with('success', 'Product added to cart successfully.');
     }
+
+    return back()->with('success', 'Product added to cart successfully.');
+}
+
 
     public $category, $product, $prodColorSelectedQuantity, $quantityCount = 1, $productColorId;
 
@@ -65,7 +66,7 @@ class CartController extends Controller
     public function decrementQuantity($itemId)
     {
         $cartItem = Cart::find($itemId);
-        if ($cartItem && $cartItem->quantity > 1) {  // Prevent quantity from going below 1
+        if ($cartItem && $cartItem->quantity > 1) { 
             $cartItem->decrement('quantity');
         }
         return redirect()->route('cart.index')->with('success', 'Quantity decreased');

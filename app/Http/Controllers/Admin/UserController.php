@@ -10,7 +10,15 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+    
     public function index(){
+        $user = auth()->user();
+        if ($user->role_as == 0) {
+            return redirect('/')->with('error', 'Access Denied. You do not have permission to access the admin dashboard.');
+        }
+        if ($user->role_as == 2) {
+            return redirect('/admin/dashboard')->with('error', 'Access Denied. You do not have permission to access the admin dashboard.');
+        }
         $users = User::paginate(10);
         return view('admin.users.index', compact('users'));
     }
@@ -39,12 +47,6 @@ class UserController extends Controller
     public function edit($userId){
         $user = User::findorFail($userId);
         return view('admin.users.edit', compact('user'));
-        // User::create([
-        //     'name' => $request['name'],
-        //     'email' => $request['email'],
-        //     'password' => Hash::make($request['password']),
-        //     'role_as' => $request['role_as'],
-        // ]);
     }
 
     public function update(Request $request, $userId){
