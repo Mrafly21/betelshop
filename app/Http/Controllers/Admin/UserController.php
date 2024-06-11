@@ -32,6 +32,7 @@ class UserController extends Controller
             'name' => ['required', 'string'],
             'email' => ['required', 'string', 'email', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'max:30'],
+            'contact_number' => ['nullable', 'integer', 'min:8', 'max:15'],
             'role_as' => ['required', 'integer'],
         ]);
 
@@ -39,6 +40,7 @@ class UserController extends Controller
             'name' => $request['name'],
             'email' => $request['email'],
             'password' => Hash::make($request['password']),
+            'contact_number' => $request['contact_number'],
             'role_as' => $request['role_as'],
         ]);
         return redirect('/admin/users')->with('message', 'User Created Sucessfully');
@@ -52,6 +54,7 @@ class UserController extends Controller
     public function update(Request $request, $userId){
         $validated = $request->validate([
             'name' => ['required', 'string'],
+            'contact_number' => ['nullable', 'integer', 'min:8', 'max:15'],
             'role_as' => ['required', 'integer'],
         ]);
 
@@ -59,6 +62,7 @@ class UserController extends Controller
             'name' => $request['name'],
             'email' => $request['email'],
             'password' => Hash::make($request['password']),
+            'contact_number' => $request['contact_number'],
             'role_as' => $request['role_as'],
         ]);
         return redirect('/admin/users')->with('message', 'User Edit Sucessfully');

@@ -48,9 +48,16 @@
                                 <i class="fa fa-user"></i> {{ Auth::user()->name }}
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="{{ url('wishlist') }}"><i class="fa fa-heart"></i> Edit Profile </a></li>
-                                <li><a class="dropdown-item" href="#"><i class="fa fa-heart"></i> Register as Seller </a></li>
-                                <li><a class="dropdown-item" href="#"><i class="fa fa-heart"></i> Message </a></li>
+                                @if(Auth::user()->role_as =='0')
+                                <li><a class="dropdown-item" href="{{ url('profile') }}"><i class="fa fa-heart"></i> Edit Profile </a></li>
+                                <li><a class="dropdown-item" href="{{ url('become-seller') }}"><i class="fa fa-user-plus"></i> Request become Seller </a></li>
+                                @elseif(Auth::user()->role_as =='1')
+                                <li><a class="dropdown-item" href="{{ url('profile') }}"><i class="fa fa-heart"></i> Edit Profile </a></li>
+                                <li><a class="dropdown-item" href="{{ url('admin/dashboard') }}"><i class="fa fa-folder"></i> Go to Admin Dashboard </a></li>
+                                @elseif(Auth::user()->role_as =='2')
+                                <li><a class="dropdown-item" href="{{ url('profile') }}"><i class="fa fa-heart"></i> Edit Profile </a></li>
+                                <li><a class="dropdown-item" href="{{ url('admin/dashboard') }}"><i class="fa fa-folder"></i> Go to Seller Dashboard </a></li>
+                                @endif
                                 <li>
                                     {{-- <a class="dropdown-item" href="#"><i class="fa fa-sign-out"></i> Logout</a> --}}
                                     <a class="dropdown-item" href="{{ route('logout') }}"

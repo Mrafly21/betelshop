@@ -6,6 +6,10 @@
 
     <div class="py-5 bg-white">
         <div class="container">
+            @if (session('message'))
+            <div class="alert alert-success">{{ session('message') }}</div>
+            @endif
+            
             <div class="row justify-content-center">
                 <div class="col-md-8 text-center">
                     <h4>Welcome to Betelnut Shop.</h4>

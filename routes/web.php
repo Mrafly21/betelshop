@@ -12,6 +12,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Frontend\CartController;
 use App\Http\Controllers\Frontend\CheckoutController;
 use App\Http\Controllers\Frontend\HelpController;
+use App\Http\Controllers\Admin\RequestBecomeSellerController;
 use App\Http\Controllers\Frontend\WishlistController;
 
 Route::get('/',[App\Http\Controllers\Frontend\FrontendController::class, 'index'] );
@@ -35,6 +36,9 @@ Route::get('thank-you', [App\Http\Controllers\Frontend\FrontendController::class
 
 Route::get('orders', [App\Http\Controllers\Frontend\OrderController::class, 'index']);
 Route::get('orders/{orderId}', [App\Http\Controllers\Frontend\OrderController::class, 'show']);
+
+Route::get('become-seller', [App\Http\Controllers\Frontend\RequestBecomeSellerController::class, 'index']);
+Route::post('submit-become-seller', [App\Http\Controllers\Frontend\RequestBecomeSellerController::class, 'submit'])->name('become-seller.submit');
 
 Route::get('/help', [HelpController::class, 'index'])->name('help');
 Route::post('/help/send', [HelpController::class, 'sendMessage'])->name('send.message');
@@ -104,4 +108,8 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
 
     Route::get('/message', [App\Http\Controllers\Admin\MessageController::class, 'index'])->name('admin.messages.index');
     Route::get('/message/{id}', [App\Http\Controllers\Admin\MessageController::class, 'show'])->name('admin.messages.show');
+
+    Route::get('become-seller', [RequestBecomeSellerController::class, 'index']);
+    Route::post('become-seller/accept/{id}', [RequestBecomeSellerController::class, 'accept'])->name('admin.request-become-seller.accept');
+    Route::post('become-seller/reject/{id}', [RequestBecomeSellerController::class, 'reject'])->name('admin.request-become-seller.reject');
 });
