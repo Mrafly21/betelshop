@@ -13,7 +13,9 @@ use App\Http\Controllers\Frontend\CartController;
 use App\Http\Controllers\Frontend\CheckoutController;
 use App\Http\Controllers\Frontend\HelpController;
 use App\Http\Controllers\Admin\RequestBecomeSellerController;
+use App\Http\Controllers\Admin\SellerReportController;
 use App\Http\Controllers\Frontend\WishlistController;
+use App\Http\Controllers\NotificationController;
 
 Route::get('/',[App\Http\Controllers\Frontend\FrontendController::class, 'index'] );
 Route::get('login', [LoginController::class, 'index'])->name('login');
@@ -42,6 +44,14 @@ Route::post('submit-become-seller', [App\Http\Controllers\Frontend\RequestBecome
 
 Route::get('/help', [HelpController::class, 'index'])->name('help');
 Route::post('/help/send', [HelpController::class, 'sendMessage'])->name('send.message');
+
+Route::post('/report-seller', [App\Http\Controllers\Frontend\FrontendController::class, 'reportSeller'])->name('report.seller');
+
+// routes/web.php
+
+Route::get('notifications', [NotificationController::class, 'index']);
+Route::get('notifications/{id}', [NotificationController::class, 'show']);
+
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
@@ -112,4 +122,7 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::get('become-seller', [RequestBecomeSellerController::class, 'index']);
     Route::post('become-seller/accept/{id}', [RequestBecomeSellerController::class, 'accept'])->name('admin.request-become-seller.accept');
     Route::post('become-seller/reject/{id}', [RequestBecomeSellerController::class, 'reject'])->name('admin.request-become-seller.reject');
+
+    Route::get('seller-reports', [SellerReportController::class, 'index'])->name('admin.seller-reports.index');
+    Route::post('seller-reports/{id}/{action}', [SellerReportController::class, 'handleReport'])->name('admin.seller-reports.handle');
 });

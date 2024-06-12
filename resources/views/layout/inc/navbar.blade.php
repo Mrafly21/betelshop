@@ -43,6 +43,27 @@
                                     <i class="fa fa-heart"></i> Wishlist ({{ $wishlistCount }})
                                 </a>
                             </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="notifDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fa fa-bell"></i> 
+                                    @if(Auth::user()->notifications()->where('status', 'unread')->count() > 0)
+                                        <span class="badge bg-danger">{{ Auth::user()->notifications()->where('status', 'unread')->count() }}</span>
+                                    @endif
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="notifDropdown">
+                                    @php
+                                        $notifications = Auth::user()->notifications()->orderBy('created_at', 'desc')->take(5)->get();
+                                    @endphp
+                                    @if($notifications->isEmpty())
+                                        <li><a class="dropdown-item" href="#">No notifications</a></li>
+                                    @else
+                                        @foreach($notifications as $notification)
+                                            <li><a class="dropdown-item" href="{{ url('notifications/' . $notification->id) }}">{{ $notification->message }}</a></li>
+                                        @endforeach
+                                        <li><a class="dropdown-item" href="{{ url('notifications') }}">View more</a></li>
+                                    @endif
+                                </ul>
+                            </li>
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                                 data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="fa fa-user"></i> {{ Auth::user()->name }}

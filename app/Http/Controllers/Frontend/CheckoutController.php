@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Cart;
+use App\Models\Notification;
 use App\Models\Order;
 use App\Models\OrderItem;
 use Illuminate\Http\Request;
@@ -78,6 +79,13 @@ class CheckoutController extends Controller
                 ]);
             }
         }
+        
+         Notification::create([
+            'user_id' => $sellerId,
+            'message' => 'New order received, please check your order page in seller dashboard.',
+            'type' => 'new_order',
+            'status' => 'unread',
+        ]);
     
         Cart::where('user_id', Auth::id())->delete();
         return redirect('thank-you')->with('message', 'Orders Placed Successfully for Multiple Sellers');

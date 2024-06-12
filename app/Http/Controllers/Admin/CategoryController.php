@@ -6,6 +6,8 @@ use App\Models\Category;
 use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryFormRequest;
+use App\Models\Notification;
+use App\Models\User;
 use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
 
@@ -52,6 +54,17 @@ class CategoryController extends Controller
         $category->status = $request->status == true ? '1' : '0';
 
         $category->save();
+
+         // Send notifications to users with role_as = 1
+         $users = User::where('role_as', 1)->get();
+         foreach ($users as $user) {
+             Notification::create([
+                 'user_id' => $user->id,
+                 'message' => 'New Category is Created. Category name is ' . $category->name,
+                 'type' => 'new_category',
+                 'status' => 'unread',
+             ]);
+         }
 
         return redirect('admin/category')->with('message', 'Category Added Successfully');
     }

@@ -48,6 +48,10 @@
                                                 <i class="fa fa-trash"></i> Remove
                                             </button>
                                         </form>
+                                        <form action="{{ route('cart.add', $item->product->id) }}" method="POST">
+                                            @csrf
+                                            <button type="submit" class="btn btn-primary">Add to Cart</button>
+                                        </form>   
                                     </div>
                                 </div>
                             </div>

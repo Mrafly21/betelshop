@@ -12,7 +12,7 @@
             @forelse ($categories as $categoryItem)
             <div class="col-6 col-md-3">
                 <div class="category-card">
-                    <a href="{{ url('/collections/'.$categoryItem->name) }}">
+                    <a href="{{ url('/collections/'.$categoryItem->meta_title) }}">
                         <div class="category-card-img">
                             <img src="{{ asset('uploads/category/'.$categoryItem->image) }}" style="width: 100%;height:300px">
                         </div>

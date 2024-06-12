@@ -56,6 +56,12 @@
                             <h5 class="mb-0">Small Description</h5>
                             <p>{{ $product->small_description }}</p>
                         </div>
+                        <p class="product-path">
+                            Seller: {{ $product->seller->name }}
+                        </p>
+                        <button type="button" class="btn btn-danger mt-3" data-bs-toggle="modal" data-bs-target="#reportSellerModal">
+                            Report Seller
+                        </button>
                     </div>
                 </div>
             </div>
@@ -70,6 +76,31 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+     <!-- Report Seller Modal -->
+     <div class="modal fade" id="reportSellerModal" tabindex="-1" aria-labelledby="reportSellerModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="{{ route('report.seller') }}" method="POST" onsubmit="return confirm('Are you sure you want to report this seller?');">
+                    @csrf
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="reportSellerModalLabel">Report Seller</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="reason" class="form-label">Reason for reporting</label>
+                            <textarea class="form-control" id="reason" name="reason" rows="3" required></textarea>
+                        </div>
+                        <input type="hidden" name="seller_id" value="{{ $product->seller->id }}">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-danger">Report Seller</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

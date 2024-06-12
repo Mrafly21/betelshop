@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\Sliders;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\ReportSeller;
 use App\Models\Wishlist;
 use Illuminate\Support\Facades\Auth;
 
@@ -92,5 +93,21 @@ class FrontendController extends Controller
         if ($this->quantityCount > 0) {
             $this->quantityCount--;
         }
+    }
+
+    public function reportSeller(Request $request)
+    {
+        $request->validate([
+            'reason' => 'required|string',
+            'seller_id' => 'required|exists:users,id',
+        ]);
+
+        ReportSeller::create([
+            'user_id' => Auth::id(),
+            'seller_id' => $request->seller_id,
+            'message' => $request->reason,
+        ]);
+
+        return redirect('/')->with('message', 'Seller reported successfully.');
     }
 }

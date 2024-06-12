@@ -56,11 +56,17 @@
       @if(Auth::user()->role_as =='1')
       <li class="nav-item">
         <a class="nav-link" href="{{ url('admin/message') }}">
-          <i class="mdi mdi-sale menu-icon"></i>
-          <span class="menu-title">Message</span>
+          <i class="fa fa-key"></i>
+          <span class="menu-title ms-3">Message</span>
         </a>
       </li>
       @endif
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url('admin/seller-reports') }}">
+          <i class="fa fa-bell"> </i>
+          <span class="menu-title ms-3">Seller Report</span>
+        </a>
+      </li>
     </ul>
   </nav>
 
