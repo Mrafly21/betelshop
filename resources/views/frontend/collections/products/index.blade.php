@@ -55,7 +55,10 @@
                                                 </a>
                                             </div>
                                             <div class="mt-2">
-                                                <a href="" class="btn btn1">Add To Cart</a>
+                                                <form action="{{ route('cart.add', $productItem->id) }}" method="POST">
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-primary">Add to Cart</button>
+                                                </form>   
                                                 <a href="{{ url('/collections/'.$productItem->category->slug.'/'.$productItem->slug) }}" class="btn btn1"> View </a>
                                             </div>
                                         </div>
@@ -65,11 +68,10 @@
                                 <div class="col-md-12">
                                     <div class="p-2">
                                         <h4>
-                                            No Available Products for {{ $category->name }}
+                                            No Available Products for Category: {{ $category->name }}
                                         </h4>
                                     </div>
                                 </div>
-                                    
                                 @endforelse
                         </div>
                     </div>

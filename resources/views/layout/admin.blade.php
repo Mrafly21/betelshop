@@ -26,6 +26,9 @@
 
     <!-- Style -->
     <link rel="stylesheet" href="{{ asset('assets/css/admin.css') }}">
+    
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css" rel="stylesheet">
+
 
     <!--Owl Carousel-->
     <link rel="stylesheet" href="{{ asset('assets/css/owl.carousel.min.css') }}">

@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\RequestBecomeSellerController;
 use App\Http\Controllers\Admin\SellerReportController;
 use App\Http\Controllers\Frontend\WishlistController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\ProfileController;
 
 Route::get('/',[App\Http\Controllers\Frontend\FrontendController::class, 'index'] );
 Route::get('login', [LoginController::class, 'index'])->name('login');
@@ -31,6 +32,8 @@ Route::get('collections/{category_slug}/{product_slug}', [App\Http\Controllers\F
 Route::get('/newArrivals', [App\Http\Controllers\Frontend\FrontendController::class, 'newArrivals']);
 Route::get('/featured-product', [App\Http\Controllers\Frontend\FrontendController::class, 'featuredProduct']);
 Route::get('/search',  [App\Http\Controllers\Frontend\FrontendController::class, 'searchProduct']);
+Route::get('/myorder', [App\Http\Controllers\Frontend\MyOrderController::class, 'index']);
+Route::get('/myorder-details/{orderId}', [App\Http\Controllers\Frontend\MyOrderController::class, 'show']);
 
 //Wishlist
 Route::get('wishlist', [App\Http\Controllers\Frontend\WishlistController::class, 'index']);
@@ -46,6 +49,12 @@ Route::get('/help', [HelpController::class, 'index'])->name('help');
 Route::post('/help/send', [HelpController::class, 'sendMessage'])->name('send.message');
 
 Route::post('/report-seller', [App\Http\Controllers\Frontend\FrontendController::class, 'reportSeller'])->name('report.seller');
+
+
+Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+Route::post('/profile/update', [ProfileController::class, 'updateProfile'])->name('profile.update');
+Route::get('/profile/change-password', [ProfileController::class, 'showChangePasswordForm'])->name('profile.show-change-password-form');
+Route::post('/profile/change-password', [ProfileController::class, 'changePassword'])->name('profile.change-password');
 
 // routes/web.php
 
@@ -64,6 +73,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/wishlist/remove/{productId}', [WishlistController::class, 'removeFromWishlist'])->name('wishlist.remove');
     Route::get('checkout', [App\Http\Controllers\Frontend\CheckoutController::class, 'index']);
     Route::post('/checkout/process', [CheckoutController::class, 'placeOrder'])->name('checkout.process');
+    Route::post('/update-payment-method', [CheckoutController::class, 'updatePaymentMethod']);
 });
 
 

@@ -50,7 +50,7 @@
                                         <span class="badge bg-danger">{{ Auth::user()->notifications()->where('status', 'unread')->count() }}</span>
                                     @endif
                                 </a>
-                                <ul class="dropdown-menu" aria-labelledby="notifDropdown">
+                                <ul class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="notifDropdown">
                                     @php
                                         $notifications = Auth::user()->notifications()->orderBy('created_at', 'desc')->take(5)->get();
                                     @endphp
@@ -58,11 +58,15 @@
                                         <li><a class="dropdown-item" href="#">No notifications</a></li>
                                     @else
                                         @foreach($notifications as $notification)
-                                            <li><a class="dropdown-item" href="{{ url('notifications/' . $notification->id) }}">{{ $notification->message }}</a></li>
+                                            <li>
+                                                <a class="dropdown-item {{ $notification->status == 'unread' ? 'bg-primary text-white' : '' }}" href="{{ url('notifications/' . $notification->id) }}">
+                                                    {{ $notification->message }}
+                                                </a>
+                                            </li>
                                         @endforeach
-                                        <li><a class="dropdown-item" href="{{ url('notifications') }}">View more</a></li>
+                                        <li><a class="dropdown-item bg-warning" href="{{ url('notifications') }}">View more</a></li>
                                     @endif
-                                </ul>
+                                </ul>                                
                             </li>
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                                 data-bs-toggle="dropdown" aria-expanded="false">
@@ -122,6 +126,9 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url('/featured-product') }}">Featured Products</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url('/myorder') }}">My Order</a>
                     </li>
                 </ul>
             </div>

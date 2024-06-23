@@ -62,6 +62,9 @@
                         <button type="button" class="btn btn-danger mt-3" data-bs-toggle="modal" data-bs-target="#reportSellerModal">
                             Report Seller
                         </button>
+                        <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $product->seller->contact_number) }}" target="_blank" class="btn btn-success mt-3">
+                            Contact by WhatsApp
+                        </a>
                     </div>
                 </div>
             </div>

@@ -28,8 +28,7 @@ class OrderController extends Controller
     if ($request->status) {
         $orders->where('status_message', $request->status);
     }
-    $orders = $orders->paginate(10);
-
+    $orders = $orders->paginate(30);
     return view('admin.order.index', compact('orders'));
 }
 

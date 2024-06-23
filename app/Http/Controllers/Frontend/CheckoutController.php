@@ -10,9 +10,19 @@ use App\Models\OrderItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Midtrans\Config;
+use Midtrans\Snap;
 
 class CheckoutController extends Controller
 {
+    public function __construct()
+    {
+        Config::$serverKey = env('MIDTRANS_SERVER_KEY');
+        Config::$isProduction = env('MIDTRANS_IS_PRODUCTION');
+        Config::$isSanitized = env('MIDTRANS_IS_SANITIZED');
+        Config::$is3ds = env('MIDTRANS_IS_3DS');
+    }
+
     public function index()
     {
         if (!Auth::check()) {
@@ -41,19 +51,57 @@ class CheckoutController extends Controller
             'phone' => 'required|numeric',
             'pincode' => 'required|numeric',
             'address' => 'required',
-            'payment_mode' => 'required'
         ]);
-    
+
         $carts = Cart::with('product')->where('user_id', Auth::id())->get();
         if ($carts->isEmpty()) {
             return redirect('collections')->with('error', 'No items in cart to checkout.');
         }
-    
+
         // Group cart items by seller_id
         $cartGroups = $carts->groupBy(function ($item) {
             return $item->product->user_id;
         });
-    
+
+        $totalProductAmount = 0;
+        // Midtrans payment processing
+        $params = [
+            'transaction_details' => [
+                'order_id' => 'ORD' . Str::random(10),
+                'gross_amount' => $totalProductAmount,
+            ],
+            'customer_details' => [
+                'first_name' => $validated['fullname'],
+                'last_name' => '',
+                'email' => $validated['email'],
+                'phone' => $validated['phone'],
+                'billing_address' => [
+                    'first_name' => $validated['fullname'],
+                    'last_name' => '',
+                    'email' => $validated['email'],
+                    'phone' => $validated['phone'],
+                    'address' => $validated['address'],
+                ],
+                'shipping_address' => [
+                    'first_name' => $validated['fullname'],
+                    'last_name' => '',
+                    'email' => $validated['email'],
+                    'phone' => $validated['phone'],
+                    'address' => $validated['address'],
+                ],
+            ],
+            'item_details' => $carts->map(function ($cartItem) {
+                return [
+                    'id' => $cartItem->product_id,
+                    'price' => $cartItem->product->selling_price,
+                    'quantity' => $cartItem->quantity,
+                    'name' => $cartItem->product->name,
+                ];
+            })->toArray(),
+        ];
+
+        $snapToken = Snap::getSnapToken($params);
+
         foreach ($cartGroups as $sellerId => $items) {
             $order = Order::create([
                 'user_id' => Auth::id(),
@@ -65,10 +113,10 @@ class CheckoutController extends Controller
                 'pincode' => $validated['pincode'],
                 'address' => $validated['address'],
                 'status_message' => 'in progress',
-                'payment_mode' => $validated['payment_mode'],
-                'payment_id' => $validated['payment_id'] ?? null
+                'payment_mode' => 'Midtrans Gateway', // Use the selected payment mode
+                'payment_id' => $snapToken
             ]);
-    
+
             foreach ($items as $cartItem) {
                 OrderItem::create([
                     'order_id' => $order->id,
@@ -77,19 +125,33 @@ class CheckoutController extends Controller
                     'quantity' => $cartItem->quantity,
                     'price' => $cartItem->product->selling_price,
                 ]);
+                $totalProductAmount += $cartItem->product->selling_price * $cartItem->quantity;
             }
+
+            Notification::create([
+                'user_id' => $sellerId,
+                'message' => 'New order received, please check your order page in seller dashboard.',
+                'type' => 'new_order',
+                'status' => 'unread',
+            ]);
         }
-        
-         Notification::create([
-            'user_id' => $sellerId,
-            'message' => 'New order received, please check your order page in seller dashboard.',
-            'type' => 'new_order',
-            'status' => 'unread',
-        ]);
-    
+
         Cart::where('user_id', Auth::id())->delete();
-        return redirect('thank-you')->with('message', 'Orders Placed Successfully for Multiple Sellers');
+
+        return view('frontend.checkout.payment', compact('snapToken', 'totalProductAmount'));
     }
-    
-    
+
+    public function updatePaymentMethod(Request $request)
+{
+    $serverKey = config('midtrans.server_key');
+    $hashed = hash("sha512", $request->order_id.$request->status_code.$request->gross_amount.$serverKey);
+    if($hashed == $request->signature_key){
+        if($request->transaction_status == 'capture'){
+            $order = Order::find($request->order_id);
+            $order->update(['payment_mode' => $request-> payment_type]);
+        }
+    }
+    return response()->json(['status' => 'success', 'message' => 'Payment mode updated successfully']);
+}
+
 }

@@ -64,14 +64,6 @@
                                             <small class="text-danger">{{ $message }}</small>
                                         @enderror
                                     </div>
-                                    <div class="col-md-12 mb-3">
-                                        <label>Select Payment Mode:</label>
-                                        <select name="payment_mode" class="form-control">
-                                            <option value="Cash on Delivery">Cash on Delivery</option>
-                                            <option value="Shopee">Shopee</option>
-                                            <option value="Tokopedia">Tokopedia</option>
-                                        </select>
-                                    </div>
                                     <div class="col-md-12">
                                         <button type="submit" class="btn btn-primary">Place Order</button>
                                     </div>

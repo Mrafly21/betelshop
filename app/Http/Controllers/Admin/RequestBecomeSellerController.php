@@ -18,11 +18,12 @@ class RequestBecomeSellerController extends Controller
     public function accept($id)
     {
         $requestSeller = RequestBecomeSeller::findOrFail($id);
+        $contact_number = str_replace('+', '', $requestSeller->contact_number);
         $user = User::where('email', $requestSeller->email)->first();
 
         if ($user) {
             $user->update([
-                'contact_number' => $requestSeller->contact_number,
+                'contact_number' => $contact_number,
                 'role_as' => 2,
             ]);
 

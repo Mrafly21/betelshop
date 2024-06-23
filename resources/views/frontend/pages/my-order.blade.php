@@ -1,11 +1,16 @@
-@extends('layout.admin')
+@extends('layout.app')
 
 @section('title', 'My Order')
 
-@section('content') 
-
-<div class="py-1 py-md-1">
-    <div class="">
+@section('content')
+<div class="py-5 bg-white">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h4>My Order</h4>
+                <div class="underline mb-5"></div>
+            </div>  
+        </div>
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
@@ -57,7 +62,7 @@
                                             <td>{{ $Orderitem->created_at->format('d-m-Y') }}</td>
                                             <td>{{ $Orderitem->status_message }}</td>
                                             <td>
-                                                <a href="{{ url('admin/order/'.$Orderitem->id) }}" class="btn btn-primary btn-sm">View</a>
+                                                <a href="{{ url('myorder-details/'.$Orderitem->id) }}" class="btn btn-primary btn-sm">View</a>
                                             </td>
                                         </tr>
                                     @empty
@@ -74,5 +79,6 @@
         </div>
     </div>
 </div>
-
+    </div>
+</div>
 @endsection

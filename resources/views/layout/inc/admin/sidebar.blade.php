@@ -67,6 +67,12 @@
           <span class="menu-title ms-3">Seller Report</span>
         </a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url('admin/become-seller') }}">
+            <i class="fa fa-briefcase"></i>
+            <span class="menu-title ms-3">Become Seller Request</span>
+        </a>
+    </li>    
     </ul>
   </nav>
 
