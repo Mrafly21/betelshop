@@ -17,10 +17,14 @@ class CheckoutController extends Controller
 {
     public function __construct()
     {
-        Config::$serverKey = env('MIDTRANS_SERVER_KEY');
+        Config::$serverKey = 'SB-Mid-server-stFdxsmP6eTyM9qSaLcjCCva';
         Config::$isProduction = env('MIDTRANS_IS_PRODUCTION');
         Config::$isSanitized = env('MIDTRANS_IS_SANITIZED');
         Config::$is3ds = env('MIDTRANS_IS_3DS');
+
+        Config::$curlOptions[CURLOPT_SSL_VERIFYHOST] = 0;
+        Config::$curlOptions[CURLOPT_SSL_VERIFYPEER] = 0;
+        Config::$curlOptions[CURLOPT_HTTPHEADER] = [];
     }
 
     public function index()

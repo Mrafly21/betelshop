@@ -7,23 +7,23 @@ use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
-    // Show login form
+    
     public function index()
     {
         return view('auth.login');
     }
 
-    // Handle login form submission
+    
     public function login(Request $request)
     {
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
-            // Authentication passed
-            return redirect()->intended('/'); // Redirect to dashboard or desired page
+            
+            return redirect()->intended('/'); 
         } else {
-            // Authentication failed
-            return back()->withErrors(['email' => 'Invalid credentials']); // Redirect back with error message
+          
+            return back()->withErrors(['email' => 'Invalid credentials']); 
         }
     }
 
